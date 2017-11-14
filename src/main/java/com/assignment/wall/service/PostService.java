@@ -41,8 +41,9 @@ public class PostService {
      */
     public List<Post> getTimeLineforLoginUser(User loginuser, int pageStart, int pageSize){
         List<User> following=loginuser.getFollowing();
-        following.add(loginuser);
+        //following.add(loginuser);
         List<String> ids=following.stream().map(User::getUserId).collect(Collectors.toList());
+        ids.add(loginuser.getUserId());
         //return postRepository.findTop100ByPostUser_UserIdInOrderByPostTimeDesc(ids);
         Pageable pageable = new PageRequest(pageStart,pageSize);
         return postRepository.findByPostUser_UserIdInOrderByPostTimeDesc(ids, pageable);
