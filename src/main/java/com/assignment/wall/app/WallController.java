@@ -47,11 +47,7 @@ public class WallController {
     String timeline(Principal principal, Model model,
                     @RequestParam(value = "pageStart", required = false, defaultValue = "0") int pageStart,
                     @RequestParam(value = "pageSize", required = false, defaultValue = "100") int pageSize) {
-        model.addAttribute("postForm", new PostForm());    //attribute can be omitted.
-
-        //default attribute name is Classname whose first letter is lower case.
-
-
+        model.addAttribute("postForm", new PostForm());
         User loginUser = Util.getLoginuserFromPrincipal(principal);
         model.addAttribute("userinfo", loginUser);
 
@@ -90,94 +86,6 @@ public class WallController {
         return "redirect:/feed";
     }
 
-//    //register
-//    @GetMapping(value = "/register")
-//    String registerPage(Model model) {
-//        model.addAttribute("registerForm", new RegisterForm());
-//        return "register";
-//    }
-//
-//    @PostMapping(value = "/register")
-//    String register(@Validated RegisterForm form, BindingResult bindingResult, Model model) {
-//        if (bindingResult.hasErrors()) {
-//            log.info("user:" + form.getUserId());
-//            log.info("pass:" + form.getPassword());
-//            log.info("scr:" + form.getScreenName());
-//            Set<String> err = new HashSet<>();
-//            bindingResult.getAllErrors().forEach(e -> err.add(e.getDefaultMessage()));
-//            model.addAttribute("errors", err);
-//            return "register";
-//        }
-//
-//        log.info("user:" + form.getUserId());
-//        log.info("pass:" + form.getPassword());
-//        log.info("scr:" + form.getScreenName());
-//
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//        User user = new User(form.getUserId(), encoder.encode(form.getPassword()), form.getScreenName());
-//        try {
-//            userService.create(user);
-//        } catch (UserIdAlreadyExistsException e) {
-//            Set<String> errors = new HashSet<>();
-//            errors.add(e.getMessage());
-//            model.addAttribute("errors", errors);
-//            return "register";
-//        } catch (Exception e) {
-//
-//            Set<String> errors = new HashSet<>();
-//            errors.add("unexpected error occured. try again.");
-//            model.addAttribute("errors", errors);
-//
-//            log.info(e.toString());
-//            return "register";
-//        }
-//        return "redirect:/loginForm";
-//    }
-
-//    @GetMapping("/update")
-//    String updateUserDataPage(Model model) {
-//        model.addAttribute("userForm", new UserForm());
-//        //model.addAttribute("uploadForm",new UploadFileForm());
-//        return "mypage";
-//    }
-//
-//    @PostMapping("/update")
-//    String updateUserData(Principal principal, @Validated UserForm form, BindingResult bindingResult,
-//                          Model model) {
-//        if (bindingResult.hasErrors()) {
-//            Set<String> err = new HashSet<>();
-//            bindingResult.getAllErrors().forEach(e -> err.add(e.getDefaultMessage()));
-//            model.addAttribute("errors", err);
-//            //return updateUserDataPage(model);
-//            return "mypage"; //多分上と同義
-//        }
-//
-//        try {
-//            User newUser = userService.find(Util.getLoginuserFromPrincipal(principal).getUserId());
-//            if (!Objects.equals(form.getScreenName(), ""))
-//                newUser.setScreenName(form.getScreenName());
-//            if (!Objects.equals(form.getBiography(), ""))
-//                newUser.setBiography(form.getBiography());
-//            userService.update(newUser);
-//
-//            Util.updateAuthenticate(principal, newUser);
-//
-//            model.addAttribute("userinfo", newUser);
-//        } catch (UserIdNotFoundException e) {
-//            Set<String> errors = new HashSet<>();
-//            errors.add(e.getMessage());
-//            model.addAttribute("errors", errors);
-//            return "mypage";
-//        } catch (Exception e) {
-//            Set<String> errors = new HashSet<>();
-//            errors.add("unexpected error occured. try again.");
-//            model.addAttribute("errors", errors);
-//            log.info(e.getMessage());
-//            return "mypage";
-//        }
-//        return "redirect:/";
-//    }
-
     @PostMapping(value = "/follow/{userid}")
     String follow(Principal principal, @PathVariable("userid") String userid, RedirectAttributes attributes){
         User loginUser=Util.getLoginuserFromPrincipal(principal);
@@ -194,18 +102,6 @@ public class WallController {
             log.info(e.getMessage());
         }
         return "redirect:/feed";
-    }
-
-
-    //------Util--------------------------------------
-
-    @GetMapping("/debug")
-    String debug() {
-        List<User> users = userService.findAll();
-        for (User u : users) {
-            log.info(u.toString());
-        }
-        return "redirect:/";
     }
 
 }
